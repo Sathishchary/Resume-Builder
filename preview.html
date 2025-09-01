@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Preview | AI-Powered Resume Builder</title>
+    <meta name="description" content="Preview your professional resume before downloading. See how your resume will look to employers and make final adjustments.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
+    
+    <style>
+        /* Preview specific styles */
+        .preview-container {
+            display: flex;
+            min-height: calc(100vh - 80px);
+            background: var(--surface-color);
+        }
+        
+        .preview-controls {
+            width: 300px;
+            background: var(--background-color);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem;
+            position: sticky;
+            top: 80px;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+        
+        .preview-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
+        .resume-preview {
+            width: 8.5in;
+            min-height: 11in;
+            background: white;
+            box-shadow: var(--shadow-lg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .resume-page {
+            padding: 0.75in;
+            font-family: 'Times New Roman', serif;
+            font-size: 11pt;
+            line-height: 1.4;
+            color: #000;
+        }
+        
+        .resume-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #333;
+        }
+        
+        .resume-name {
+            font-size: 24pt;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #2563eb;
+        }
+        
+        .resume-title {
+            font-size: 14pt;
+            font-style: italic;
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+        
+        .resume-contact {
+            font-size: 10pt;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .resume-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #2563eb;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.25rem;
+            border-bottom: 1px solid #2563eb;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .experience-item,
+        .education-item,
+        .achievement-item {
+            margin-bottom: 1rem;
+        }
+        
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.25rem;
+        }
+        
+        .item-title {
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        .item-company {
+            font-style: italic;
+            color: #666;
+        }
+        
+        .item-date {
+            font-size: 10pt;
+            color: #666;
+        }
+        
+        .item-location {
+            font-size: 10pt;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+        
+        .item-description {
+            margin-top: 0.25rem;
+            font-size: 11pt;
+        }
+        
+        .item-description ul {
+            margin: 0;
+            padding-left: 1rem;
+        }
+        
+        .item-description li {
+            margin-bottom: 0.25rem;
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.5rem;
+        }
+        
+        .skill-item {
+            background: #f0f9ff;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 10pt;
+            text-align: center;
+            border: 1px solid #2563eb;
+        }
+        
+        .summary-text {
+            font-size: 11pt;
+            line-height: 1.5;
+            text-align: justify;
+        }
+        
+        /* Control Panel Styles */
+        .control-group {
+            margin-bottom: 2rem;
+        }
+        
+        .control-label {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: block;
+            color: var(--text-primary);
+        }
+        
+        .template-selector {
+            display: grid;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .template-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .template-option:hover {
+            border-color: var(--primary-color);
+            background: var(--surface-color);
+        }
+        
+        .template-option.active {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .template-radio {
+            margin: 0;
+        }
+        
+        .zoom-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .zoom-btn {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .zoom-btn:hover {
+            background: var(--border-color);
+        }
+        
+        .zoom-level {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        .download-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .preview-container {
+                flex-direction: column;
+            }
+            
+            .preview-controls {
+                width: 100%;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            
+            .resume-preview {
+                width: 100%;
+                max-width: 8.5in;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .preview-content {
+                padding: 1rem;
+            }
+            
+            .resume-page {
+                padding: 0.5in;
+                font-size: 10pt;
+            }
+            
+            .resume-name {
+                font-size: 20pt;
+            }
+            
+            .resume-contact {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Print Styles */
+        @media print {
+            .preview-controls {
+                display: none;
+            }
+            
+            .preview-container {
+                display: block;
+            }
+            
+            .preview-content {
+                padding: 0;
+            }
+            
+            .resume-preview {
+                width: 100%;
+                box-shadow: none;
+                border-radius: 0;
+            }
+            
+            .resume-page {
+                padding: 0.5in;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container flex justify-between items-center">
+                <a href="index.html" class="nav-brand">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+                        <polyline points="14,2 14,8 20,8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10,9 9,9 8,9"/>
+                    </svg>
+                    ResumeBuilder AI
+                </a>
+                
+                <div class="flex items-center gap-4">
+                    <a href="builder.html" class="btn btn-outline">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                        Edit Resume
+                    </a>
+                    <button id="printBtn" class="btn btn-secondary">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+                        </svg>
+                        Print
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="preview-container">
+        <!-- Preview Controls -->
+        <aside class="preview-controls">
+            <h2 style="margin-bottom: 1.5rem; font-size: 1.25rem;">Preview Controls</h2>
+            
+            <!-- Template Selection -->
+            <div class="control-group">
+                <label class="control-label">Template Style</label>
+                <div class="template-selector" id="templateSelector">
+                    <label class="template-option active">
+                        <input type="radio" name="template" value="professional" class="template-radio" checked>
+                        <span>Professional</span>
+                    </label>
+                    <label class="template-option">
+                        <input type="radio" name="template" value="modern" class="template-radio">
+                        <span>Modern</span>
+                    </label>
+                    <label class="template-option">
+                        <input type="radio" name="template" value="classic" class="template-radio">
+                        <span>Classic</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Zoom Controls -->
+            <div class="control-group">
+                <label class="control-label">Zoom Level</label>
+                <div class="zoom-controls">
+                    <button class="zoom-btn" id="zoomOutBtn">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7"/>
+                        </svg>
+                    </button>
+                    <span class="zoom-level" id="zoomLevel">100%</span>
+                    <button class="zoom-btn" id="zoomInBtn">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Download Options -->
+            <div class="control-group">
+                <label class="control-label">Download Resume</label>
+                <div class="download-options">
+                    <button id="downloadPdfBtn" class="btn btn-primary">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        Download PDF
+                    </button>
+                    <button id="downloadDocxBtn" class="btn btn-secondary">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        Download DOCX
+                    </button>
+                </div>
+            </div>
+            
+            <!-- ATS Score -->
+            <div class="control-group">
+                <label class="control-label">ATS Score</label>
+                <div class="card" style="text-align: center; padding: 1rem;">
+                    <div style="font-size: 2rem; font-weight: bold; color: var(--accent-color); margin-bottom: 0.5rem;" id="atsScore">85</div>
+                    <div style="font-size: 0.875rem; color: var(--text-secondary);">ATS Compatibility</div>
+                    <div style="margin-top: 0.5rem;">
+                        <button class="btn btn-outline" style="font-size: 0.75rem; padding: 0.25rem 0.75rem;">
+                            View Suggestions
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Resume Preview -->
+        <section class="preview-content">
+            <div class="resume-preview" id="resumePreview">
+                <div class="resume-page">
+                    <!-- Header -->
+                    <div class="resume-header">
+                        <div class="resume-name" id="previewName">John Doe</div>
+                        <div class="resume-title" id="previewTitle">Software Engineer</div>
+                        <div class="resume-contact" id="previewContact">
+                            <span>john.doe@email.com</span>
+                            <span>•</span>
+                            <span>(555) 123-4567</span>
+                            <span>•</span>
+                            <span>San Francisco, CA</span>
+                            <span>•</span>
+                            <span>linkedin.com/in/johndoe</span>
+                        </div>
+                    </div>
+
+                    <!-- Summary -->
+                    <div class="resume-section" id="summarySection">
+                        <div class="section-title">Professional Summary</div>
+                        <div class="summary-text" id="previewSummary">
+                            Experienced software engineer with 5+ years of expertise in full-stack development. 
+                            Proven track record of delivering scalable web applications and leading development teams. 
+                            Passionate about creating innovative solutions and mentoring junior developers.
+                        </div>
+                    </div>
+
+                    <!-- Experience -->
+                    <div class="resume-section" id="experienceSection">
+                        <div class="section-title">Professional Experience</div>
+                        <div id="previewExperience">
+                            <!-- Experience items will be rendered here -->
+                        </div>
+                    </div>
+
+                    <!-- Education -->
+                    <div class="resume-section" id="educationSection">
+                        <div class="section-title">Education</div>
+                        <div id="previewEducation">
+                            <!-- Education items will be rendered here -->
+                        </div>
+                    </div>
+
+                    <!-- Skills -->
+                    <div class="resume-section" id="skillsSection">
+                        <div class="section-title">Skills</div>
+                        <div class="skills-grid" id="previewSkills">
+                            <!-- Skills will be rendered here -->
+                        </div>
+                    </div>
+
+                    <!-- Achievements -->
+                    <div class="resume-section" id="achievementsSection">
+                        <div class="section-title">Achievements & Certifications</div>
+                        <div id="previewAchievements">
+                            <!-- Achievements will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/preview.js"></script>
+</body>
+</html>
