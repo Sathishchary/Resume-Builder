@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Templates | AI-Powered Resume Builder</title>
+    <meta name="description" content="Choose from professional resume templates designed for different industries. Modern, ATS-friendly designs that help you stand out.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/templates.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container flex justify-between items-center">
+                <a href="index.html" class="nav-brand">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+                        <polyline points="14,2 14,8 20,8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10,9 9,9 8,9"/>
+                    </svg>
+                    ResumeBuilder AI
+                </a>
+                
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="templates.html" class="nav-link active">Templates</a></li>
+                    <li><a href="builder.html" class="nav-link">Builder</a></li>
+                    <li><a href="#features" class="nav-link">Features</a></li>
+                    <li><a href="login.html" class="btn btn-outline">Sign In</a></li>
+                    <li><a href="builder.html" class="btn btn-primary">Get Started</a></li>
+                </ul>
+                
+                <button class="mobile-menu-button" id="mobileMenuButton" aria-label="Toggle menu">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="templates-hero">
+            <div class="container">
+                <div class="text-center fade-in">
+                    <h1>Professional Resume Templates</h1>
+                    <p>Choose from our collection of expertly designed templates. Each template is optimized for ATS systems and modern hiring practices.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filter Section -->
+        <section class="template-filters">
+            <div class="container">
+                <div class="filters-wrapper">
+                    <div class="filter-group">
+                        <label for="industryFilter">Industry:</label>
+                        <select id="industryFilter" class="form-select">
+                            <option value="">All Industries</option>
+                            <option value="technology">Technology</option>
+                            <option value="business">Business</option>
+                            <option value="creative">Creative</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="education">Education</option>
+                            <option value="finance">Finance</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="styleFilter">Style:</label>
+                        <select id="styleFilter" class="form-select">
+                            <option value="">All Styles</option>
+                            <option value="modern">Modern</option>
+                            <option value="classic">Classic</option>
+                            <option value="creative">Creative</option>
+                            <option value="minimal">Minimal</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="colorFilter">Color:</label>
+                        <select id="colorFilter" class="form-select">
+                            <option value="">All Colors</option>
+                            <option value="blue">Blue</option>
+                            <option value="black">Black & White</option>
+                            <option value="green">Green</option>
+                            <option value="purple">Purple</option>
+                        </select>
+                    </div>
+                    
+                    <button id="clearFilters" class="btn btn-secondary">
+                        Clear Filters
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Templates Grid -->
+        <section class="templates-grid">
+            <div class="container">
+                <div id="templatesContainer" class="templates-container">
+                    <!-- Templates will be loaded here by JavaScript -->
+                </div>
+                
+                <div id="loadingSpinner" class="loading-spinner hidden">
+                    <div class="spinner"></div>
+                    <p>Loading templates...</p>
+                </div>
+                
+                <div id="noResults" class="no-results hidden">
+                    <svg width="64" height="64" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    <h3>No templates found</h3>
+                    <p>Try adjusting your filters to see more templates.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Template Preview Modal -->
+        <div id="templateModal" class="template-modal hidden">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Template Preview</h3>
+                    <button id="closeModal" class="close-button" aria-label="Close">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="templatePreview" class="template-preview">
+                        <!-- Template preview will be loaded here -->
+                    </div>
+                    <div class="template-details">
+                        <h4 id="templateName">Template Name</h4>
+                        <p id="templateDescription">Template description</p>
+                        <div class="template-tags" id="templateTags">
+                            <!-- Tags will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="useTemplateBtn" class="btn btn-primary">
+                        Use This Template
+                    </button>
+                    <button id="cancelModal" class="btn btn-secondary">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer style="padding: 2rem 0; background: var(--text-primary); color: white;">
+        <div class="container">
+            <div class="grid grid-cols-3">
+                <div>
+                    <h4 style="color: white; margin-bottom: 1rem;">ResumeBuilder AI</h4>
+                    <p style="opacity: 0.8;">Create professional resumes with AI-powered assistance and modern templates.</p>
+                </div>
+                <div>
+                    <h4 style="color: white; margin-bottom: 1rem;">Quick Links</h4>
+                    <ul style="list-style: none;">
+                        <li style="margin-bottom: 0.5rem;"><a href="templates.html" style="color: white; opacity: 0.8; text-decoration: none;">Templates</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="builder.html" style="color: white; opacity: 0.8; text-decoration: none;">Resume Builder</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="preview.html" style="color: white; opacity: 0.8; text-decoration: none;">Preview</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color: white; margin-bottom: 1rem;">Support</h4>
+                    <ul style="list-style: none;">
+                        <li style="margin-bottom: 0.5rem;"><a href="#" style="color: white; opacity: 0.8; text-decoration: none;">Help Center</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="#" style="color: white; opacity: 0.8; text-decoration: none;">Contact Us</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="#" style="color: white; opacity: 0.8; text-decoration: none;">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="border-top: 1px solid rgba(255,255,255,0.2); margin-top: 2rem; padding-top: 2rem; text-align: center; opacity: 0.6;">
+                <p>&copy; 2024 ResumeBuilder AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/templates.js"></script>
+</body>
+</html>
